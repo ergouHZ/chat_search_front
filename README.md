@@ -65,7 +65,7 @@ This project uses ChatGPT to generate target URLs, fetches data from OpenAlex, a
 
 ## Project Structure
 
-**Components Folder**
+### Components Folder
 
 This folder is used to store the basic components, mainly divided into three modules: message container, input area, and main framework. The main message and data processing aggregation are placed in the parent component of the chat layout, and data is transmitted to the child components using props.
 
@@ -73,7 +73,8 @@ The main hierarchical framework includes processing and filtering of the first r
 
 Messages are temporarily stored locally to simulate the chat process, and each time the page loads, `useEffect` is used to retrieve data. During callback requests, it also stores and renders the data.
 
-**Service Folder**
+
+### Service Folder
 
 This folder mainly stores the backend asynchronous functions interacting with AI and the OpenAlex database. There are two types of AI requests: the first is primarily responsible for obtaining URL links and implementing a dialogue function through a custom `openAiMessage` interface. The second OpenAI request is responsible for summarizing the articles.
 
@@ -90,7 +91,8 @@ For the articles brief summary(which is needed at the beginning of articles list
 
 Therefore, when obtaining article data through OpenAlex, the keywords array was extracted and sent to OpenAI for summarization, which yielded better results.
 
-**Utils Folder**
+
+### Utils Folder**
 
 This folder contains the dark mode switching context to ensure a global theme, a clear algorithm for URL extraction, as well as the main entities and interfaces used.
 
