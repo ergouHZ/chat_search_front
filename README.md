@@ -13,36 +13,45 @@ This project uses ChatGPT to generate target URLs, fetches data from OpenAlex, a
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/ergouHZ/chat_search_engine
+
+   ```
 
 2. Project directory:
    ```bash
    cd react_vite
    ```
 3. Add API Keys
-    In order to use the openAi serviece,
-    Please change the API key in  
-    ./service/chatGPTreq 
-    ./service/chatGPTsummary
+   In order to use the openAi serviece,
+   Please change the API key in
 
-    Or create a '.env' file in root, and add 
+   ```bash
+   ./service/chatGPTreq
+   ./service/chatGPTsummary
+   ```
+
+   Or create a '.env' file in root, and add
+
    ```bash
     VITE_APP_API_KEY=YourAPIKey
    ```
+
 4. Run the project directly(Node.js):
+
    ```bash
    cd react_vite
    npm install
    npm run dev
-    ```
+   ```
 
    Docker run:
+
    ```bash
    docker build -t react_vite .
    docker run -p 5173:5173 react_vite
    ```
-
 
 ## Features
 
@@ -56,7 +65,6 @@ This project uses ChatGPT to generate target URLs, fetches data from OpenAlex, a
 
 ## Project Structure
 
-
 **Components Folder**
 
 This folder is used to store the basic components, mainly divided into three modules: message container, input area, and main framework. The main message and data processing aggregation are placed in the parent component of the chat layout, and data is transmitted to the child components using props.
@@ -65,12 +73,12 @@ The main hierarchical framework includes processing and filtering of the first r
 
 Messages are temporarily stored locally to simulate the chat process, and each time the page loads, `useEffect` is used to retrieve data. During callback requests, it also stores and renders the data.
 
-
 **Service Folder**
 
 This folder mainly stores the backend asynchronous functions interacting with AI and the OpenAlex database. There are two types of AI requests: the first is primarily responsible for obtaining URL links and implementing a dialogue function through a custom `openAiMessage` interface. The second OpenAI request is responsible for summarizing the articles.
 
 Users can now query literature through conversation, for example:
+
 - User: "Give me some literature related to artificial intelligence."
 - AI: "Sure, can you provide me with more specific information?"
 - User: "I want literature from 2021 onwards."
@@ -81,7 +89,6 @@ The main system prompt words are quite complex and have undergone multiple debug
 For the articles brief summary(which is needed at the beginning of articles list in order to offer better experience), the method chosen was to extract an array of keywords and collect a set of keywords. Initially, we tried sending the abstract of each article to OpenAI for a brief summary, but the summary was too long and the effect was not ideal, with slow transmission efficiency.
 
 Therefore, when obtaining article data through OpenAlex, the keywords array was extracted and sent to OpenAI for summarization, which yielded better results.
-
 
 **Utils Folder**
 
