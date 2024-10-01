@@ -92,7 +92,7 @@ For the articles brief summary(which is needed at the beginning of articles list
 Therefore, when obtaining article data through OpenAlex, the keywords array was extracted and sent to OpenAI for summarization, which yielded better results.
 
 
-### Utils Folder**
+### Utils Folder
 
 This folder contains the dark mode switching context to ensure a global theme, a clear algorithm for URL extraction, as well as the main entities and interfaces used.
 
