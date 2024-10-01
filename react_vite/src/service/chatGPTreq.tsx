@@ -65,7 +65,6 @@ export function convertToOpenAIFormat(
     role: "user",
     content: prompt,
   });
-  console.log(openAIMessages);
   return openAIMessages;
 }
 
