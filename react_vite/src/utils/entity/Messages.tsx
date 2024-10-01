@@ -7,7 +7,13 @@ export interface AiMessage {
 
 export interface MessageRound extends AiMessage{
     userMessage:string
-} 
+}
+
+//this is used to send to openai
+export interface openAiMessage{
+    role:string; 
+    content: string; 
+}
 
 //this class and constructor is used to build the proccesing message after user input.
 //user message updates first, and then updates articles, summary(AI)

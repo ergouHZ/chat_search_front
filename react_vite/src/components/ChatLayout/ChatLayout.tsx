@@ -7,9 +7,11 @@ import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import { Box, Fab, Switch } from "@mui/material";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 //customized
-import chatGPThandler from "../../service/chatGPTreq";
+import chatGPThandler, {
+  convertToOpenAIFormat,
+} from "../../service/chatGPTreq";
 import chatGPTFinalAnswerHandler from "../../service/chatGPTsummary";
 import openAlexReq from "../../service/openAlexReq";
 import { useThemeContext } from "../../utils/DardThemeContext";
@@ -88,16 +90,18 @@ export default function ChatWindow() {
   };
 
   //get the user input message from the child component(TextInput)
-  const handleQuery = useCallback((message: string) => {
+  const handleQuery = (message: string) => {
     addMessageRound(message);
     //if user send the message, this will send to the server to get response
     sendQueryGetUrl(message);
-  }, []);
+  };
 
   const sendQueryGetUrl = (prompt: string) => {
     //set the loading state (and pass is to the child components- the button)
     setLoading(true);
-    chatGPThandler(prompt)
+    
+    //use chat gpt to send conversation list messages
+    chatGPThandler(convertToOpenAIFormat(messages, prompt))
       .then((res: string) => {
         //the response here is a generated link/unrelated response from openai
 
@@ -105,7 +109,7 @@ export default function ChatWindow() {
         const filteredRes: string = ExtractUrl(res);
 
         if (filteredRes.substring(0, prefix.length) !== prefix) {
-          //in case if the prompt is unrelative to
+          //in case if the prompt is unrelative, no url and articles will be given
           updateSummaryInChat(res);
           setLoading(false);
           return;
@@ -128,9 +132,9 @@ export default function ChatWindow() {
             article.keywords.map((keyword: Keyword) => {
               keywordCombo += keyword.display_name + " ";
             });
-            
+
             //get all the authors
-            let authors:string|null = ""
+            let authors: string | null = "";
             article.authorships.map((author: Authorship) => {
               authors += author.author.display_name + ", ";
             });
@@ -151,7 +155,7 @@ export default function ChatWindow() {
               title: article.display_name,
               year: article.created_date.substring(0, 4),
               citations: article.cited_by_count,
-              author: authors?authors:null,
+              author: authors ? authors : null,
               openAccess: article.open_access.is_oa,
               summary: abstractText,
               url: article.open_access.is_oa
@@ -190,20 +194,17 @@ export default function ChatWindow() {
       });
   };
 
-  const generateThePrompt = useCallback(
-    (articles: Article[], prompt: string) => {
-      let promptString: string = prompt + ". ";
-      promptString +=
-        articles.length +
-        " articles have been found. /n - Key word:" +
-        keywordCombo +
-        stringifyArticles(articles);
-      //generate the final answer
-      getFinalAnswer(promptString);
-      return;
-    },
-    [getFinalAnswer]
-  );
+  const generateThePrompt = (articles: Article[], prompt: string) => {
+    let promptString: string = prompt + ". ";
+    promptString +=
+      articles.length +
+      " articles have been found. /n - Key word:" +
+      keywordCombo +
+      stringifyArticles(articles);
+    //generate the final answer
+    getFinalAnswer(promptString);
+    return;
+  };
 
   const stringifyArticles = (articles?: Article[] | null): string | null => {
     let result = "";

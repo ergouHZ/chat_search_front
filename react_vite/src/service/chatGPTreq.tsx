@@ -1,46 +1,73 @@
+import { MessageRound, openAiMessage } from "../utils/entity/Messages";
+
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 //TODO: Change this to your key!!
 
 //if connect error, will retry 2 times maximum
-async function chatGPThandler(prompt: string,retryCount = 2): Promise<string> {
-    try {
-        const data = await fetch("/api/v1/chat/completions", {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${API_KEY}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                model: "gpt-4o-mini",
-                messages: [
-                    {
-                        role: "system",
-                        content: systemPrompt,
-                    },
-                    {
-                        role: "user",
-                        content: prompt,
-                    },
-                ],
-                max_tokens: 300,
-            }),
-        });
+async function chatGPThandler(
+  messagesOpenAi: openAiMessage[],
+  retryCount = 2
+): Promise<string> {
+  try {
+    const data = await fetch("/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: messagesOpenAi,
+        max_tokens: 300,
+      }),
+    });
 
-        const response = await data.json();
-        const message:string = response.choices[0].message.content;
-        return message;  // Return the message, if successfully
-    } catch (err) {
-        if (retryCount > 0) {
-            await new Promise(resolve => setTimeout(resolve, 900)); //  delay before retrying
-            return chatGPThandler(prompt, retryCount - 1);
-        } else {
-            console.error(err);
-            throw err;
-        }
+    const response = await data.json();
+    const message: string = response.choices[0].message.content;
+    return message; // Return the message, if successfully
+  } catch (err) {
+    if (retryCount > 0) {
+      await new Promise((resolve) => setTimeout(resolve, 900)); //  delay before retrying
+      return chatGPThandler(messagesOpenAi, retryCount - 1);
+    } else {
+      console.error(err);
+      throw err;
     }
+  }
 }
 
-export default chatGPThandler
+export default chatGPThandler;
+
+//get historical messages from openai, and format the messages to send again, makeit like a conversation
+export function convertToOpenAIFormat(
+  messages: MessageRound[],
+  prompt: string
+): openAiMessage[] {
+  const openAIMessages: openAiMessage[] = [];
+
+  //add system prompt to the first
+  openAIMessages.push({
+    role: "system",
+    content: systemPrompt,
+  });
+
+  messages.flatMap((messageRound) => {
+    openAIMessages.push({
+      role: "user",
+      content: messageRound.userMessage,
+    });
+    openAIMessages.push({
+      role: "assistant",
+      content: messageRound.summary || "No summary available",
+    });
+  });
+  openAIMessages.push({
+    role: "user",
+    content: prompt,
+  });
+  console.log(openAIMessages);
+  return openAIMessages;
+}
 
 // tested functional systemPrompt
 const systemPrompt: string = `You are a chatbot interface that helps users find research articles based on specific filters. These filters are used to generate URL structures compatible with the OpenAlex Works API. Here are the key filters and their usage:
