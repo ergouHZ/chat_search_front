@@ -78,8 +78,8 @@ export default function ArticleCard({ article, index }: Props) {
           <TextRender text={article.title} />
         </Typography>
       )}
-      <Typography variant="h6" >
-        {article.author}
+      <Typography variant="h6">
+        {article.author?.substring(0, article.author.length - 2)}
       </Typography>
       <br />
       <Typography variant="body1">
@@ -156,25 +156,25 @@ export default function ArticleCard({ article, index }: Props) {
               {article.title}
             </Typography>
             <CardActions sx={{ padding: 0, justifyContent: "space-between" }}>
-              <Box>
+              
+              <Box
+                onClick={(e) => {
+                  e.stopPropagation(); /* stop opening the drawer */
+                  if (article.url)
+                    window.open(article.url, "_blank", "noopener noreferrer");
+                  else console.log("No URL provided");
+                }}
+              >
                 {article.openAccess ? (
                   <LockOpenRoundedIcon color="primary" />
                 ) : (
                   <LockIcon color="disabled" />
                 )}
-                <Button
-                  size="small"
-                  disabled={!article.openAccess}
-                  onClick={(e) => {
-                    e.stopPropagation(); /* stop opening the drawer */
-                    if (article.url)
-                      window.open(article.url, "_blank", "noopener noreferrer");
-                    else console.log("No URL provided");
-                  }}
-                ></Button>
+                <Button size="small" disabled={!article.openAccess} />
               </Box>
+
               <Typography sx={{ fontSize: 14, flex: "row" }}>
-                {article.author}
+                {article.author?.substring(0, article.author.length - 2)}
               </Typography>
               <ButtonGroup
                 size="small"
@@ -203,6 +203,8 @@ export default function ArticleCard({ article, index }: Props) {
       <Drawer open={open} onClose={toggleDrawer(false)} anchor="right">
         {DrawerList}
       </Drawer>
+
+      {/* COPY toast */}
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         open={alert}

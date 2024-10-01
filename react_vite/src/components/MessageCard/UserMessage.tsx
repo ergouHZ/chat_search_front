@@ -35,6 +35,7 @@ function UserMessage({ userMessage }: Props) {
           flex: 1,
           width: "100%",
           padding: 2,
+          paddingTop:0,
           boxSizing: "border-box",
           fontSize: 16,
         }}

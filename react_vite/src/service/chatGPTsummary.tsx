@@ -9,8 +9,6 @@ async function chatGPTFinalAnswerHandler(prompt: string,retryCount = 2): Promise
         const data = await fetch("/api/v1/chat/completions", {
             method: "POST",
             headers: {
-                //TODO change this key!!
-                //TODO change this key!!
                 Authorization: `Bearer ${API_KEY}`,
                 "Content-Type": "application/json",
             },
