@@ -20,12 +20,13 @@ This project uses ChatGPT to generate target URLs, fetches data from OpenAlex, a
    ```bash
    cd react_vite
 
-   
 3. Add API Keys
     In order to use the openAi serviece,
-    Please change the API key in the ./service/chatGPTreq ./service/chatGPTsummary
+    Please change the API key in  
+    ./service/chatGPTreq 
+    ./service/chatGPTsummary
 
-    Or create a '.env' file, and add 
+    Or create a '.env' file in root, and add 
    ```bash
     VITE_APP_API_KEY=YourAPIKey
 
@@ -35,11 +36,12 @@ This project uses ChatGPT to generate target URLs, fetches data from OpenAlex, a
    npm install
    npm run dev
 
-
-   Docker run:
+Docker run:
    ```bash
-    docker build -t react_vite .
-    docker run -p 5173:5173 react_vite
+   docker build -t react_vite .
+   docker run -p 5173:5173 react_vite
+
+
 
 ## Features
 
