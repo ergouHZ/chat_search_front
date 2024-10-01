@@ -1,7 +1,6 @@
 FROM node:18-alpine
 
 # built by AI
-
 WORKDIR /app
 
 # copy package.json and package-lock.json
@@ -11,9 +10,8 @@ RUN npm install
 
 COPY . .
 
-
 RUN npm run build
 
-EXPOSE 5173
+EXPOSE 4173
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "preview"]
