@@ -132,7 +132,7 @@ export default function ChatWindow() {
             //get all the authors
             let authors:string|null = ""
             article.authorships.map((author: Authorship) => {
-              authors += author.author.display_name + ",";
+              authors += author.author.display_name + ", ";
             });
 
             //join the abstract words all into a pagraph of the summary
