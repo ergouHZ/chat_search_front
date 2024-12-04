@@ -1,7 +1,7 @@
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 //TODO: Change this to your key!!
 
-//This function is called when articles are fetched, 
+//This function is called when articles are fetched,
 // and generate a small summary in the beginning of the article list
 //if connect error, will retry 2 times maximum
 async function chatGPTFinalAnswerHandler(prompt: string,retryCount = 2): Promise<string> {
